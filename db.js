@@ -1,31 +1,21 @@
-const knex = require('knex');
-const { attachOnExitListener } = require('./utils/dbUtils');
-const dotenv = require('dotenv');
-dotenv.config();
+const express = require('express');
+const { Client } = require('pg');
 
-const knexConfig = {
-  client: 'mysql2',
-  connection: {
-    host: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE,
-    charset: 'utf8mb4',
-  },
-  pool: { min: 2, max: 20 },
-  acquireConnectionTimeout: 10000
-};
+const app = express();
+app.use(express.json());
 
-const db = knex(knexConfig);
+// Remplacez par votre propre URL de connexion
+const connectionString = 'postgresql://postgres.vmlibxqkeluppiomwmfr:MasterSIRHSIFA06@aws-0-eu-west-3.pooler.supabase.com:6543/postgres';
 
-db.raw('SELECT 1')
-  .then(() => {
-    console.log('Database connected successfully.');
-  })
-  .catch((err) => {
-    console.error('Database connection failed:', err);
-  });
+const client = new Client({
+  connectionString: connectionString,
+});
 
-attachOnExitListener(db);
+client.connect()
+  .then(() => console.log('Connexion à PostgreSQL réussie'))
+  .catch(err => console.error('Erreur de connexion à PostgreSQL', err.stack));
 
-module.exports = db;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
+});
