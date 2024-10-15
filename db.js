@@ -3,9 +3,11 @@ const { attachOnExitListener } = require('./utils/dbUtils');
 const dotenv = require('dotenv');
 dotenv.config();
 
+
 const knexConfig = {
-  client: 'pg', // PostgreSQL comme client
-  connection: process.env.SUPABASE_URL, // Utiliser la connexion URI depuis .env
+  client: 'pg',
+  connection: process.env.SUPABASE_URL,
+  ssl: { rejectUnauthorized: false },
   pool: { min: 2, max: 20 },
   acquireConnectionTimeout: 10000
 };
