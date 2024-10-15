@@ -4,14 +4,8 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const knexConfig = {
-  client: 'mysql',
-  connection: {
-    host: process.env.SQL_HOST,
-    user: process.env.SQL_USER,
-    password: process.env.SQL_PASSWORD,
-    database: process.env.SQL_DATABASE,
-    charset: 'utf8',
-  },
+  client: 'pg', // PostgreSQL comme client
+  connection: process.env.SUPABASE_URL, // Utiliser la connexion URI depuis .env
   pool: { min: 2, max: 20 },
   acquireConnectionTimeout: 10000
 };
