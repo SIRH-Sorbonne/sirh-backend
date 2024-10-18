@@ -8,11 +8,6 @@ const employeeManagementRoutes = require('./modules/employee-management/routes/e
 const learningAndDevelopmentRoutes = require('./modules/learning-and-development/routes/learningAndDevelopmentRoutes');
 const timeAndAttendanceRoutes = require('./modules/time-and-attendance/routes/TimeAndAttendanceRoutes');
 
-app.use('/recruitment', recruitmentRoutes);
-app.use('/employee-management', employeeManagementRoutes);
-app.use('/learning-and-development', learningAndDevelopmentRoutes);
-app.use('/time-and-attendance', timeAndAttendanceRoutes);
-
 const knexConfig = {
   client: 'pg',
   connection: process.env.SUPABASE_URL,
@@ -23,6 +18,8 @@ const knexConfig = {
 
 const db = knex(knexConfig);
 
+app.set('db', db); // Attachez l'instance de Knex à l'application Express
+
 db.raw('SELECT 1')
   .then(() => {
     console.log('Database connected successfully.');
@@ -32,6 +29,11 @@ db.raw('SELECT 1')
   });
 
 attachOnExitListener(db);
+
+app.use('/recruitment', recruitmentRoutes);
+app.use('/employee-management', employeeManagementRoutes);
+app.use('/learning-and-development', learningAndDevelopmentRoutes);
+app.use('/time-and-attendance', timeAndAttendanceRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -2,7 +2,7 @@ const { Knex } = require('knex');
 
 class Employee {
   /**
-   * @param {Knex} knex 
+   * @param {Knex} knex
    */
   static createTable(knex) {
     return knex.schema.createTable('employees', (table) => {
@@ -18,8 +18,8 @@ class Employee {
   }
 
   /**
-   * @param {Knex} knex 
-   * @param {number} id 
+   * @param {Knex} knex
+   * @param {number} id
    * @returns {Promise<Object>}
    */
   static getEmployeeById(knex, id) {
@@ -27,14 +27,21 @@ class Employee {
   }
 
   /**
-   * @param {Knex} knex 
-   * @param {Object} employeeData 
+   * @param {Knex} knex
+   * @param {Object} employeeData
    * @returns {Promise<number[]>}
    */
   static createEmployee(knex, employeeData) {
     return knex('employees').insert(employeeData);
   }
 
+  /**
+   * @param {Knex} knex
+   * @returns {Promise<Object[]>}
+   */
+  static getAllEmployees(knex) {
+    return knex('employees').select('*');
+  }
 }
 
 module.exports = Employee;
