@@ -1,31 +1,39 @@
+require('dotenv').config();
+const knex = require('knex');
+const { attachOnExitListener } = require('./utils/dbUtils');
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
-const fs = require('fs');
-const path = require('path');
+const recruitmentRoutes = require('./modules/recruitment/routes/recruitmentRoutes');
+const employeeManagementRoutes = require('./modules/employee-management/routes/employeeManagementRoutes');
+const learningAndDevelopmentRoutes = require('./modules/learning-and-development/routes/learningAndDevelopmentRoutes');
+const timeAndAttendanceRoutes = require('./modules/time-and-attendance/routes/TimeAndAttendanceRoutes');
 
-const port = 3000;
+app.use('/recruitment', recruitmentRoutes);
+app.use('/employee-management', employeeManagementRoutes);
+app.use('/learning-and-development', learningAndDevelopmentRoutes);
+app.use('/time-and-attendance', timeAndAttendanceRoutes);
 
-app.use(express.json());
-app.use(bodyParser.json());
-
-const loadRoutes = (app) => {
-  const microservicesDir = path.join(__dirname);
-  fs.readdirSync(microservicesDir).forEach((folder) => {
-    const routesPath = path.join(microservicesDir, folder, 'routes', 'index.js');
-    if (fs.existsSync(routesPath)) {
-      const routes = require(routesPath);
-      app.use(`/api/${folder}`, routes);
-    }
-  });
+const knexConfig = {
+  client: 'pg',
+  connection: process.env.SUPABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  pool: { min: 2, max: 20 },
+  acquireConnectionTimeout: 10000
 };
 
-loadRoutes(app);
+const db = knex(knexConfig);
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+db.raw('SELECT 1')
+  .then(() => {
+    console.log('Database connected successfully.');
+  })
+  .catch((err) => {
+    console.error('Database connection failed:', err);
+  });
 
-app.get('/', (req, res) => {
-  res.send('App SIRH fonctionne !');
+attachOnExitListener(db);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`SIRH Project is running on port ${PORT}`);
 });

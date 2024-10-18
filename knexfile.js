@@ -1,16 +1,16 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config();
 
 module.exports = {
-    client: 'mysql2',
-    connection: {
-        host: process.env.SQL_HOST,
-        user: process.env.SQL_USER,
-        password: process.env.SQL_PASSWORD,
-        database: process.env.SQL_DATABASE,
-        charset: 'utf8mb4',
-      },
-    migrations: {
-      directory: './migrations',
-    },
-  };
+  client: 'pg',
+  connection: {
+    connectionString: process.env.SUPABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  },
+  pool: {
+    min: 2,
+    max: 10
+  },
+  migrations: {
+    tableName: 'knex_migrations'
+  }
+};
