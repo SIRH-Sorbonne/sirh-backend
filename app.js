@@ -17,8 +17,9 @@ const knexConfig = {
 };
 
 const db = knex(knexConfig);
-
-app.set('db', db); // Attachez l'instance de Knex à l'application Express
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.set('db', db);
 
 db.raw('SELECT 1')
   .then(() => {

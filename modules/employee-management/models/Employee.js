@@ -12,6 +12,7 @@ class Employee {
       table.string('email').unique().notNullable();
       table.string('phone');
       table.date('hire_date');
+      table.date('exit_date');
       table.string('status').defaultTo('active');
       table.timestamps(true, true);
     });
@@ -42,6 +43,27 @@ class Employee {
   static getAllEmployees(knex) {
     return knex('employees').select('*');
   }
+
+  /**
+   * @param {Knex} knex
+   * @param {number} id
+   * @param {Object} employeeData
+   * @returns {Promise<number>}
+   */
+  static updateEmployee(knex, id, employeeData) {
+    return knex('employees').where('id', id).update(employeeData);
+  }
+
+  /**
+   * @param {Knex} knex
+   * @param {number} id
+   * @returns {Promise<number>}
+   */
+  static deleteEmployee(knex, id) {
+    return knex('employees').where('id', id).del();
+  }
+  
+
 }
 
 module.exports = Employee;
