@@ -32,9 +32,9 @@ db.raw('SELECT 1')
 attachOnExitListener(db);
 
 app.use('/recruitment', recruitmentRoutes);
-app.use('/employee-management', employeeManagementRoutes);
-app.use('/learning-and-development', learningAndDevelopmentRoutes);
-app.use('/time-and-attendance', timeAndAttendanceRoutes);
+app.use('/employee_management', employeeManagementRoutes);
+app.use('/learning_and_development', learningAndDevelopmentRoutes);
+app.use('/time_and_attendance', timeAndAttendanceRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
