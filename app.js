@@ -21,6 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('db', db);
 
+const cors = require('cors');
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 db.raw('SELECT 1')
   .then(() => {
     console.log('Database connected successfully.');
